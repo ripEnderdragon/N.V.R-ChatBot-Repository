@@ -1,8 +1,11 @@
 import discord
 import random
+import requests
+import os
 from discord.ext import commands
 from genpass import gen_pass
 from randomemoji import gen_emodji
+from flipcoindef import flip_coin
 with open ("token.txt", "r") as f:
     token = f.read()
 
@@ -25,12 +28,65 @@ async def hello(ctx):
     await ctx.send(f'Hi! I am a bot {bot.user}!')
 
 @bot.command()
+async def cmdlist(ctx):
+    await ctx.send(f"Command List: $hello, $cmdlist, $flipcoin, $passwd, $randemo, $heh, $add")
+
+@bot.command()
 async def passwd(ctx):
     await ctx.send(gen_pass(10))
 
 @bot.command()
+async def meme(ctx):
+    randommeme = random.choice(os.listdir('pictures'))
+
+    with open(f'pictures/{randommeme}', 'rb') as f:
+        # Mari simpan file perpustakaan/library Discord yang dikonversi dalam variabel ini!
+        picture = discord.File(f)
+   # Kita kemudian dapat mengirim file ini sebagai tolok ukur!
+    await ctx.send(file=picture)
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+def get_fox_image_url():    
+    url = 'https://randomfox.ca/floof/'
+    res = requests.get(url)
+    data = res.json()
+    return data['image']
+
+def get_cat_image_url():    
+    url = 'https://api.thecatapi.com/v1/images/search'
+    res = requests.get(url)
+    data = res.json()
+    return data['id']
+
+@bot.command('duck')
+async def duck(ctx):
+    '''Setelah kita memanggil perintah bebek (duck), program akan memanggil fungsi get_duck_image_url'''
+    image_url = get_duck_image_url()
+    await ctx.send(image_url)
+
+@bot.command('fox')
+async def fox(ctx, count):
+    for i in range (count):
+        image_url = get_fox_image_url()
+        await ctx.send(image_url)
+
+@bot.command('cat')
+async def cat(ctx):
+    image_url = get_cat_image_url()
+    await ctx.send(image_url)
+
+@bot.command()
+async def flipcoin(ctx):
+    await ctx.send(flip_coin())
+
+@bot.command()
 async def randemo(ctx):
-    await ctx.send(gen_emodji)
+    await ctx.send(gen_emodji())
 
 @bot.command()
 async def heh(ctx, count_heh = 5):
@@ -40,6 +96,25 @@ async def heh(ctx, count_heh = 5):
 async def add(ctx, left: int, right: int):
     """Adds two numbers together."""
     await ctx.send(left + right)
+
+@bot.command()
+async def arrangenum(ctx, num1: int, num2: int):
+    #  num3: int, num4: int, num5: int):
+    result = ""
+    if num1 < num2 and num3 and num4 and num5:
+        result += num1
+    elif num2 < num1 and num3 and num4 and num5:
+        result += num2
+    # elif num3 < num1 and num2 and num4 and num5:
+    #     result += num3
+    # elif num4 < num1 and num2 and num3 and num5:
+    #     result += num3
+    # elif num5 < num1 and num2 and num3 and num4:
+    #     result += num5
+    return result
+
+
+
 
 
 @bot.command()
