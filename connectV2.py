@@ -6,6 +6,7 @@ from discord.ext import commands
 from genpass import gen_pass
 from randomemoji import gen_emodji
 from flipcoindef import flip_coin
+from envitipsdef import print_tips
 with open ("token.txt", "r") as f:
     token = f.read()
 
@@ -16,6 +17,7 @@ There are a number of utility commands being showcased here.'''
 
 intents = discord.Intents.default()
 intents.message_content = True
+
 
 bot = commands.Bot(command_prefix='$', intents=intents)
 
@@ -34,6 +36,10 @@ async def cmdlist(ctx):
 @bot.command()
 async def passwd(ctx):
     await ctx.send(gen_pass(10))
+
+@bot.command()
+async def envitips(ctx):
+    await ctx.send (print_tips())
 
 @bot.command()
 async def meme(ctx):
